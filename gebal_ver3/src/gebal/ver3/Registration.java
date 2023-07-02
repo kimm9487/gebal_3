@@ -8,7 +8,24 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class Registration {
-    private static final String DataDir = "D:/thePlayer/";
+    private static String emailPrefix;
+    private static String dataDir = "D:/thePlayer/";
+
+    public static String getEmailPrefix() {
+        return emailPrefix;
+    }
+
+    public static void setEmailPrefix(String emailPrefix) {
+        Registration.emailPrefix = emailPrefix;
+    }
+
+    public static String getDataDir() {
+        return dataDir;
+    }
+
+    public static void setDataDir(String dataDir) {
+        Registration.dataDir = dataDir;
+    }
 
     public static void registerUser() {
         Scanner scanner = new Scanner(System.in);
@@ -46,7 +63,7 @@ public class Registration {
 
     // 동일한 이메일이 이미 존재하는지 확인하는 메서드
     private static boolean isExistingEmail(String email) {
-        String userFolder = DataDir + email.split("@")[0] + "/";
+        String userFolder = dataDir + email.split("@")[0] + "/";
         File directory = new File(userFolder);
         return directory.exists();
     }
@@ -104,7 +121,7 @@ public class Registration {
 
     // 사용자 폴더 생성 메서드
     private static void createUserDirectory(String email) {
-        String userFolder = DataDir + email.split("@")[0] + "/";
+        String userFolder = dataDir + email.split("@")[0] + "/";
         File directory = new File(userFolder);
         if (!directory.exists()) {
             if (directory.mkdirs()) {
@@ -117,7 +134,7 @@ public class Registration {
 
     // 사용자 데이터 저장 메서드
     private static void saveUserData(String email, String password) {
-        String userFolder = DataDir + email.split("@")[0] + "/";
+        String userFolder = dataDir + email.split("@")[0] + "/";
         String userDataFile = userFolder + email.split("@")[0] + ".txt";
 
         try (FileWriter writer = new FileWriter(userDataFile)) {
@@ -132,7 +149,7 @@ public class Registration {
 
     // 사용자 정보 로드 메서드
     private static String loadUserData(String email) {
-        String userFolder = DataDir + email.split("@")[0] + "/";
+        String userFolder = dataDir + email.split("@")[0] + "/";
         String userDataFile = userFolder + email.split("@")[0] + ".txt";
 
         try (BufferedReader reader = new BufferedReader(new FileReader(userDataFile))) {
@@ -157,25 +174,62 @@ public class Registration {
         return false;
     }
 
-    // 로그인 메서드
+ // 로그인 메서드
     public static void loginUser() {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.print("이메일을 입력하세요: ");
-        String email = scanner.nextLine();
+        String email;
+        String password;
 
-        System.out.print("비밀번호를 입력하세요: ");
-        String password = scanner.nextLine();
+        while (true) {
+            System.out.print("이메일을 입력하세요: ");
+            email = scanner.nextLine();
 
-        if (validateLogin(email, password)) {
-            System.out.println("로그인 성공!");
-            // 로그인 성공 후 처리할 로직을 작성하세요.
-        } else {
-            System.out.println("잘못된 이메일 또는 비밀번호입니다.");
+            if (!isValidEmail(email)) {
+                System.out.println("잘못된 이메일입니다.");
+                System.out.print("다시 시도하시겠습니까? (Y/N): ");
+                String retry = scanner.nextLine();
+
+                if (!retry.equalsIgnoreCase("Y")) {
+                    break;
+                }
+
+                continue;
+            }
+
+            System.out.print("비밀번호를 입력하세요: ");
+            password = scanner.nextLine();
+
+            if (!isValidPassword(password)) {
+                System.out.println("잘못된 비밀번호입니다.");
+                System.out.print("다시 시도하시겠습니까? (Y/N): ");
+                String retry = scanner.nextLine();
+
+                if (!retry.equalsIgnoreCase("Y")) {
+                    break;
+                }
+
+                continue;
+            }
+
+            if (validateLogin(email, password)) {
+                System.out.println("로그인 성공!");
+                // 로그인 성공 후 처리할 로직을 작성하세요.
+                break;
+            } else {
+                System.out.println("잘못된 이메일 또는 비밀번호입니다.");
+                System.out.print("다시 시도하시겠습니까? (Y/N): ");
+                String retry = scanner.nextLine();
+
+                if (!retry.equalsIgnoreCase("Y")) {
+                    break;
+                }
+            }
         }
 
         scanner.close();
     }
+
 
     public static void withdrawUser() {
         Scanner scanner = new Scanner(System.in);
@@ -191,7 +245,7 @@ public class Registration {
             String confirm = scanner.nextLine();
 
             if (confirm.equalsIgnoreCase("Y")) {
-                String userFolder = DataDir + email.split("@")[0] + "/";
+                String userFolder = dataDir + email.split("@")[0] + "/";
                 File directory = new File(userFolder);
 
                 deleteDirectory(directory);
