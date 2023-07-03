@@ -215,6 +215,7 @@ public class Registration {
             if (validateLogin(email, password)) {
                 System.out.println("로그인 성공!");
                 // 로그인 성공 후 처리할 로직을 작성하세요.
+                Main.PlayGame();
                 break;
             } else {
                 System.out.println("잘못된 이메일 또는 비밀번호입니다.");
