@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Random;
 import java.util.Scanner;
+
+
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -152,11 +155,21 @@ class Gamed {
                     startGame(id); // 게임 계속하기 하면, startGame()메서드 호출
                     break;
                 case 2:
-                    gameRate(); // 전적 보기면, gameRate() 메서드 호출
+                    Rate.rate(); // 전적 보기면, gameRate() 메서드 호출
                     break;
                 case 3:
                     System.out.println("종료");
-                    System.exit(0);
+                    UserData.setRate((double) (Gamed.userwin) / (double) (Gamed.cumwin + Gamed.userwin + Gamed.draw) * 100);
+                    UserData.setUserRate(" [전적]\n승 : "+ Gamed.userwin + "\n패 : "  + Gamed.cumwin + "\n무승부: " + Gamed.draw + "\n승률 :"
+            				+ (int) (UserData.getRate()) + "%");
+
+                   Rate.createRateDirectory();
+                   Rate.createRateFile();
+                   Rate.saveUserRate();
+            		
+                   Rate.rankSave();
+                   System.exit(0);
+            		
             }
         }
     }

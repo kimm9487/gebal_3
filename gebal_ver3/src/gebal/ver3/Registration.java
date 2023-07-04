@@ -7,25 +7,34 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
+
+
+
+
 public class Registration {
     private static String emailPrefix;
     private static String dataDir = "D:/thePlayer/";
 
-    public static String getEmailPrefix() {
-        return emailPrefix;
-    }
+private static String email;
+    
+    static private String path;
 
-    public static void setEmailPrefix(String emailPrefix) {
-        Registration.emailPrefix = emailPrefix;
-    }
+   public static String getPath() {
+      return path;
+   }
 
-    public static String getDataDir() {
-        return dataDir;
-    }
+   public static void setPath(String path) {
+      Registration.path = path;
+   }
 
-    public static void setDataDir(String dataDir) {
-        Registration.dataDir = dataDir;
-    }
+    
+    public static String getEmail() {
+      return email;
+   }
+
+   public static void setEmail(String email) {
+      Registration.email = email;
+   }
 
     public static void registerUser() {
         Scanner scanner = new Scanner(System.in);
@@ -57,8 +66,10 @@ public class Registration {
         createUserDirectory(email);
         saveUserData(email, password);
         System.out.println("축 회원가입!");
-
+        
+        Main.main(new String[0]);
         scanner.close();
+        
     }
 
     // 동일한 이메일이 이미 존재하는지 확인하는 메서드
@@ -215,6 +226,9 @@ public class Registration {
             if (validateLogin(email, password)) {
                 System.out.println("로그인 성공!");
                 // 로그인 성공 후 처리할 로직을 작성하세요.
+                String userFolder = dataDir + email.split("@")[0] + "/";
+                setPath(userFolder + email.split("@")[0] + ".txt");  // 경로 저장
+                UserData.setId(email.split("@")[0]);
                 Main.PlayGame(email);
 //              여기 email 부분 코드 추가함
                 break;

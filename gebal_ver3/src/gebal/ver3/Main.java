@@ -2,6 +2,8 @@ package gebal.ver3;
 
 import java.util.List;
 import java.util.Scanner;
+
+
 public class Main {
 
     public static void main(String[] args) {
@@ -46,7 +48,8 @@ public class Main {
       }else if(choice == 4) {
          System.exit(0);
       }else if(choice==2){
-         
+    	  List<Player> players = Rate.readRankingFile("D:\\ranking\\ranking.txt");
+    	    Rate.printTop10Ranking(players);
       }else if(choice==3) {
          RankingSystem.sortPlayersByScoreDescending(playerDataList);
          RankingSystem.displayRanking(playerDataList);
