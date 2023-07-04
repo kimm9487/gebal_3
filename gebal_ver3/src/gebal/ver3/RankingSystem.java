@@ -58,7 +58,8 @@ public class RankingSystem {
 
     // 랭킹을 출력하는 메서드
     public static void displayRanking(List<PlayerData> playerDataList) {
-        System.out.println("랭킹:");
+    	System.out.print("\n");
+        System.out.println("승리 제일 많이한 랭킹:");
 
         int rank = 1;
         for (PlayerData playerData : playerDataList) {
@@ -68,6 +69,9 @@ public class RankingSystem {
                 break;
             }
         }
+        System.out.print("\n");
+        System.out.println("메뉴를 선택하세요");
+        Gamed.gameIng();
     }
 }
 

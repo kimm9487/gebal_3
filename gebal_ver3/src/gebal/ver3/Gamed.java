@@ -2,6 +2,7 @@ package gebal.ver3;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -121,7 +122,17 @@ class Gamed {
         int[] values = {cumwin, userwin, draw};
         String resultFilePath = "D:/thePlayer/" + id + "_result.txt";
         writeValuesToFile(resultFilePath, values);
-
+        LocalDateTime now = LocalDateTime.now(); // 현재 날짜와 시간 얻기.
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분"); // 원하는 방식으로 초기화하기.
+        String formattedDateTime = now.format(formatter);
+          UserData.setRate((double) (Gamed.userwin) / (double) (Gamed.cumwin + Gamed.userwin + Gamed.draw) * 100);
+          UserData.setUserRate(formattedDateTime+" [전적로그]\n" 
+              + "승 - " +  Gamed.userwin 
+              + "\n패 - "+ Gamed.cumwin 
+              + "\n무승부 - " + Gamed.draw
+              + "\n누적 승률 - " + (int)UserData.getRate() +"%");
+          
+        
         gameIng();
     }
 
@@ -146,9 +157,10 @@ class Gamed {
     }
 
     // 게임 끝나고, 이후
-    private static void gameIng() {
+    static void gameIng() {
         while (true) {
-            System.out.println("1. 게임 계속하기   2. 전적 보기   3. 종료");
+        	System.out.print("\n");
+            System.out.println("1. 게임 계속하기   2. 전적 보기 3. 승률별 랭킹보기 4. 승리 제일 많이한 랭킹 보기 5. 회원탈퇴하기  6. 저장 및 종료");
             int a = Integer.parseInt(sc.nextLine());
             switch (a) {
                 case 1:
@@ -156,31 +168,33 @@ class Gamed {
                     break;
                 case 2:
                     Rate.rate(); // 전적 보기면, gameRate() 메서드 호출
+                    
                     break;
                 case 3:
-                    System.out.println("종료");
-                    UserData.setRate((double) (Gamed.userwin) / (double) (Gamed.cumwin + Gamed.userwin + Gamed.draw) * 100);
-                    UserData.setUserRate(" [전적]\n승 : "+ Gamed.userwin + "\n패 : "  + Gamed.cumwin + "\n무승부: " + Gamed.draw + "\n승률 :"
-            				+ (int) (UserData.getRate()) + "%");
+                	List<Player> players = Rate.readRankingFile("D:\\ranking\\ranking.txt");
+            	    Rate.printTop10Ranking(players);
+            	    break;
+                case 4:
+                	List<PlayerData> playerDataList = RankingSystem.getPlayerDataList();
+                	RankingSystem.sortPlayersByScoreDescending(playerDataList);
+                    RankingSystem.displayRanking(playerDataList);
+                    break;
+                case 5:
+                	Registration.withdrawUser();
+                	break;
+                case 6:
+                    System.out.println("게임을 종료합니다.");
+                    
 
-                   Rate.createRateDirectory();
-                   Rate.createRateFile();
+                  
                    Rate.saveUserRate();
-            		
+                  
                    Rate.rankSave();
                    System.exit(0);
-            		
+                  
             }
         }
     }
 
-    static void gameRate() { // 전적 출력하기 역할
-        LocalDateTime now = LocalDateTime.now(); // 현재 날짜와 시간 얻기
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분"); // 원하는 방식으로 초기화하기
-        String formattedDateTime = now.format(formatter);
-
-        double result = ((double) userwin / (double) (cumwin + userwin + draw)) * 100;
-        System.out.println(
-                formattedDateTime + " 전적: 승(" + userwin + ") 패(" + cumwin + ") 무승부: " + draw + " 승률(" + (int) result + "%)");
-    }
+    
 }

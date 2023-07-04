@@ -5,6 +5,12 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
 
@@ -151,6 +157,7 @@ private static String email;
         try (FileWriter writer = new FileWriter(userDataFile)) {
             writer.write("이메일: " + email + "\n");
             writer.write("비밀번호: " + password + "\n");
+            writer.write("마지막 로그인 시간: " + getCurrentTime() + "\n"); // 현재 시간 정보 추가
             System.out.println("사용자 데이터 저장완료.");
         } catch (IOException e) {
             System.out.println("사용자 데이터 저장실패.");
@@ -158,7 +165,14 @@ private static String email;
         }
     }
 
-    // 사용자 정보 로드 메서드
+    private static String getCurrentTime() {
+      SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+      Date currentTime = new Date();
+      
+      return dateFormat.format(currentTime);
+   }
+
+   // 사용자 정보 로드 메서드
     private static String loadUserData(String email) {
         String userFolder = dataDir + email.split("@")[0] + "/";
         String userDataFile = userFolder + email.split("@")[0] + ".txt";
@@ -175,16 +189,65 @@ private static String email;
             return null;
         }
     }
+    
+    //마지막시간 검증 메서드
+    public static String getLastLoginTime(String email) {
+        String userData = loadUserData(email);
+        if (userData != null) {
+            int startIndex = userData.indexOf("마지막 로그인 시간: ");
+            if (startIndex != -1) {
+                int endIndex = userData.indexOf("\n", startIndex);
+                if (endIndex != -1) {
+                    return userData.substring(startIndex + "마지막 로그인 시간: ".length(), endIndex);
+                }
+            }
+        }
+        return null;
+    }
 
     // 로그인 검증 메서드
     public static boolean validateLogin(String email, String password) {
         String userData = loadUserData(email);
         if (userData != null) {
-            return userData.contains("이메일: " + email) && userData.contains("비밀번호: " + password);
+            if(userData.contains("이메일: " + email) && userData.contains("비밀번호: " + password)){
+               String lastLoginTime = getLastLoginTime(email);
+               if(lastLoginTime != null) {
+                  System.out.println("마지막 로그인 시간: " + lastLoginTime);
+               }
+                // 마지막 로그인 시간 갱신
+                updateLastLoginTime(email);
+               return true;
+            }
+            
         }
         return false;
     }
+    
+ // 마지막 로그인 시간 갱신 메서드
+    private static void updateLastLoginTime(String email) {
+        String userFolder = dataDir + email.split("@")[0] + "/";
+        String userDataFile = userFolder + email.split("@")[0] + ".txt";
 
+        try {
+            Path filePath = Paths.get(userDataFile);
+            List<String> lines = Files.readAllLines(filePath);
+
+            // 마지막 로그인 시간 라인 찾기
+            for (int i = 0; i < lines.size(); i++) {
+            	
+                if (lines.get(i).startsWith("마지막 로그인 시간:")) {
+                    lines.set(i, "마지막 로그인 시간: " + getCurrentTime());
+                    break;
+                }
+            }
+
+            Files.write(filePath, lines);
+            System.out.println("마지막 로그인 시간이 갱신되었습니다.");
+        } catch (IOException e) {
+            System.out.println("마지막 로그인 시간 갱신에 실패하였습니다.");
+            e.printStackTrace();
+        }
+    }
  // 로그인 메서드
     public static void loginUser() {
         Scanner scanner = new Scanner(System.in);
@@ -210,7 +273,8 @@ private static String email;
 
             System.out.print("비밀번호를 입력하세요: ");
             password = scanner.nextLine();
-
+            System.out.print("\n");
+            
             if (!isValidPassword(password)) {
                 System.out.println("잘못된 비밀번호입니다.");
                 System.out.print("다시 시도하시겠습니까? (Y/N): ");
@@ -225,7 +289,8 @@ private static String email;
 
             if (validateLogin(email, password)) {
                 System.out.println("로그인 성공!");
-                // 로그인 성공 후 처리할 로직을 작성하세요.
+                
+                // 로그인 성공 후 처리할 로직
                 String userFolder = dataDir + email.split("@")[0] + "/";
                 setPath(userFolder + email.split("@")[0] + ".txt");  // 경로 저장
                 UserData.setId(email.split("@")[0]);
