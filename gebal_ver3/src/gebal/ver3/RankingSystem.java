@@ -71,7 +71,7 @@ public class RankingSystem {
         }
         System.out.print("\n");
         System.out.println("메뉴를 선택하세요");
-        Gamed.gameIng();
+     
     }
 }
 
