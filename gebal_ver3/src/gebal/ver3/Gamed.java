@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
-
+import javax.swing.JOptionPane;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -83,9 +83,9 @@ class Gamed {
     // 게임 시작
     public static void startGame(String a) {
         id = a;
-        System.out.println("가위(1) / 바위(2) / 보(3) 중 하나를 입력하세요: ");
+       // JOptionPane.showInputDialog(null,"가위(1) / 바위(2) / 보(3) 중 하나를 입력하세요: ");
         String[] input = {"가위", "바위", "보"};
-        String str = sc.nextLine(); // 선택
+        String str = JOptionPane.showInputDialog(null,"가위(1) / 바위(2) / 보(3) 중 하나를 입력하세요: "); // 선택
         int userNum = 0;
         if (str.equals("가위") || str.equals("1")) {
             userNum = 1;
@@ -101,22 +101,22 @@ class Gamed {
         if (cumNum > userNum) {
             if (cumNum == 3 && userNum == 1) {
                 userwin++;
-                System.out.println("Computer: " + input[cumNum - 1] + "\nUser: " + input[userNum - 1] + "\n결과: User 승");
+                JOptionPane.showMessageDialog(null, "Computer: " + input[cumNum - 1] + "\nUser: " + input[userNum - 1] + "\n결과: User 승");
             } else {
                 cumwin++;
-                System.out.println("Computer: " + input[cumNum - 1] + "\nUser: " + input[userNum - 1] + "\n결과: Computer 승");
+                JOptionPane.showMessageDialog(null, "Computer: " + input[cumNum - 1] + "\nUser: " + input[userNum - 1] + "\n결과: Computer 승");
             }
         } else if (cumNum < userNum) {
             if (cumNum == 1 && userNum == 3) {
                 cumwin++;
-                System.out.println("Computer: " + input[cumNum - 1] + "\nUser: " + input[userNum - 1] + "\n결과: Computer 승");
+                JOptionPane.showMessageDialog(null, "Computer: " + input[cumNum - 1] + "\nUser: " + input[userNum - 1] + "\n결과: Computer 승");
             } else {
                 userwin++;
-                System.out.println("Computer: " + input[cumNum - 1] + "\nUser: " + input[userNum - 1] + "\n결과: User 승");
+                JOptionPane.showMessageDialog(null, "Computer: " + input[cumNum - 1] + "\nUser: " + input[userNum - 1] + "\n결과: User 승");
             }
         } else {
             draw++;
-            System.out.println("Computer: " + input[cumNum - 1] + "\nUser: " + input[userNum - 1] + "\n결과: 무승부");
+            JOptionPane.showMessageDialog(null, "Computer: " + input[cumNum - 1] + "\nUser: " + input[userNum - 1] + "\n결과: 무승부");
         }
 
         int[] values = {cumwin, userwin, draw};
@@ -159,42 +159,41 @@ class Gamed {
     // 게임 끝나고, 이후
     static void gameIng() {
         while (true) {
-        	System.out.print("\n");
-            System.out.println("1. 게임 계속하기   2. 전적 보기 3. 승률별 랭킹보기 4. 승리 제일 많이한 랭킹 보기 5. 회원탈퇴하기  6. 저장 및 종료");
-            int a = Integer.parseInt(sc.nextLine());
-            switch (a) {
+            String input = JOptionPane.showInputDialog("1. 게임 계속하기\n2. 전적 보기\n3. 승률별 랭킹보기\n4. 승리 제일 많이한 랭킹 보기\n5. 회원탈퇴하기\n6. 저장 및 종료");
+            int choice = Integer.parseInt(input);
+            
+            switch (choice) {
                 case 1:
                     startGame(id); // 게임 계속하기 하면, startGame()메서드 호출
                     break;
                 case 2:
                     Rate.rate(); // 전적 보기면, gameRate() 메서드 호출
-                    
                     break;
                 case 3:
-                	List<Player> players = Rate.readRankingFile("D:\\ranking\\ranking.txt");
-            	    Rate.printTop10Ranking(players);
-            	    break;
+                    List<Player> players = Rate.readRankingFile("D:\\ranking\\ranking.txt");
+                    Rate.printTop10Ranking(players);
+                    break;
                 case 4:
-                	List<PlayerData> playerDataList = RankingSystem.getPlayerDataList();
-                	RankingSystem.sortPlayersByScoreDescending(playerDataList);
+                    List<PlayerData> playerDataList = RankingSystem.getPlayerDataList();
+                    RankingSystem.sortPlayersByScoreDescending(playerDataList);
                     RankingSystem.displayRanking(playerDataList);
                     break;
                 case 5:
-                	Registration.withdrawUser();
-                	break;
+                    Registration.withdrawUser();
+                    break;
                 case 6:
-                    System.out.println("게임을 종료합니다.");
-                    
-
-                  
-                   Rate.saveUserRate();
-                  
-                   Rate.rankSave();
-                   System.exit(0);
-                  
+                    JOptionPane.showMessageDialog(null, "게임을 종료합니다.");
+                    Rate.saveUserRate();
+                    Rate.rankSave();
+                    System.exit(0);
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(null, "잘못된 입력 값입니다.");
+                    break;
             }
         }
     }
+
 
     
 }
