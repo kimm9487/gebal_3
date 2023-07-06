@@ -59,29 +59,29 @@ public class Rate {
       //printTop10Ranking(List<Player> userDatas) 파라미터에 
       //List<Player> players =Rate.readRankingFile("D:\\ranking\\ranking.txt")을 넣는 이유
       //readRankingFile파일에 리턴 값이 "D:\\ranking\\ranking.txt"를 하나 씩 자른 후 
-      //배열로 담은 각각 인덱스를 담은 리스트를 반환하기 때문에 plyers라는 리스트에 assign 이 가능하다
+      //배열로 담은 각각 인덱스를 담은 리스트를 반환하기 때문에 plyers라는 리스트에 assign 이 가능
       
        /*
         - Collections.sort(userDatas,Comparator.comparingDouble(Player::getWinRate).reversed());
-          이 부분은 Collections 클래스의 sort 메소드를 사용하여 userDatas 리스트를 정렬하는 부분입니다. 
+          이 부분은 Collections 클래스의 sort 메소드를 사용하여 userDatas 리스트를 정렬하는 부분. 
           sort 메소드는 첫 번째 매개변수(userDatas)로 정렬할 리스트를 받고,
-           두 번째 매개변수로는 정렬을 위한 Comparator 객체(Comparator.comparingDouble(Player::getWinRate).reversed())를 받는다.
+           두 번째 매개변수로는 정렬을 위한 Comparator 객체(Comparator.comparingDouble(Player::getWinRate).reversed())를 받음.
 
       - Comparator.comparingDouble(Player::getWinRate) 
-         이 부분은 Comparator 객체를 생성하는데, Player 클래스의 getWinRate 메소드를 호출하여 winRate 값을 비교합니다. 
-         comparingDouble 메소드는 기준으로 사용할 속성(타입)을 지정할 수 있도록 해주는 메소드입니다.
+         이 부분은 Comparator 객체를 생성하는데, Player 클래스의 getWinRate 메소드를 호출하여 winRate 값을 비교. 
+         comparingDouble 메소드는 기준으로 사용할 속성(타입)을 지정할 수 있도록 해주는 메소드.
 
         - .reversed()
-         이 메소드는 이전에 생성한 Comparator 객체를 역순으로 변경합니다.
-          따라서 winRate 값을 기준으로 내림차순 정렬이 이루어집니다.
+         이 메소드는 이전에 생성한 Comparator 객체를 역순으로 변경.
+          따라서 winRate 값을 기준으로 내림차순 정렬이 이루어짐.
 
-       결과적으로, 위의 코드는 userDatas 리스트의 요소들을 winRate 속성을 기준으로 내림차순으로 정렬하는 작업을 수행합니다. 
-       이를 통해 Player 객체의 winRate 속성이 가장 높은 값부터 가장 낮은 값까지 정렬된 리스트를 얻을 수 있습니다.
+       결과적으로, 위의 코드는 userDatas 리스트의 요소들을 winRate 속성을 기준으로 내림차순으로 정렬하는 작업을 수행. 
+       이를 통해 Player 객체의 winRate 속성이 가장 높은 값부터 가장 낮은 값까지 정렬된 리스트를 얻을 수 있다.
        */
        
        
        
-        int count = Math.min(userDatas.size(), 10);// 해당 코드는 userDatas 리스트의 크기와 10 중에서 작은 값을 선택하여 변수 `카운트`에 저장하는 역할을 합니다. 
+        int count = Math.min(userDatas.size(), 10);// 해당 코드는 userDatas 리스트의 크기와 10 중에서 작은 값을 선택하여 변수 `카운트`에 저장하는 역할을 한다. 
         
         for (int i = 0; i < count; i++) {
             Player player= userDatas.get(i);
