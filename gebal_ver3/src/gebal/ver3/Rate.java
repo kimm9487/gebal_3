@@ -53,7 +53,7 @@ public class Rate {
    }
    
    public static void printTop10Ranking(List<Player> userDatas) { //최종 전체 랭킹 10위까지 출력
-      //printTop10Ranking 메서드는 players 리스트를 승률을 기준으로 내림차순으로 정렬한 후, 상위 10개의 플레이어의 이름과 승률을 출력합니다.
+      //printTop10Ranking 메서드는 players 리스트를 승률을 기준으로 내림차순으로 정렬한 후, 상위 10개의 플레이어의 이름과 승률을 출력.
       
       
       //printTop10Ranking(List<Player> userDatas) 파라미터에 
