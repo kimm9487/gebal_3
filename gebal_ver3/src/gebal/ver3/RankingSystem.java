@@ -5,6 +5,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
+import javax.swing.JOptionPane;
+
 public class RankingSystem {
     private static final String DIRECTORY_PATH = "D:/thePlayer/"; // 파일이 저장된 디렉토리 경로
 
@@ -58,19 +60,18 @@ public class RankingSystem {
 
     // 랭킹을 출력하는 메서드
     public static void displayRanking(List<PlayerData> playerDataList) {
-    	System.out.print("\n");
-        System.out.println("승리 제일 많이한 랭킹:");
+    	
+       JOptionPane.showMessageDialog(null, "<승리 제일 많이한 랭킹>");
 
         int rank = 1;
         for (PlayerData playerData : playerDataList) {
-            System.out.println(rank + ". 아이디: " + playerData.getPlayerId() + ", 점수: " + playerData.getScore());
+        	 JOptionPane.showMessageDialog(null,rank + ". 아이디: " + playerData.getPlayerId() + ", 점수: " + playerData.getScore());
             rank++;
             if (rank > 10) {
                 break;
             }
         }
-        System.out.print("\n");
-        System.out.println("메뉴를 선택하세요");
+        
      
     }
 }
